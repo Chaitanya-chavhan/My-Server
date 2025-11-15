@@ -1,23 +1,32 @@
 const express = require('express');
 const path = require('path');
-const cors = require('cors'); // <-- ADD THIS LINE
+const cors = require('cors');
 
 const app = express();
-const port = 3000;
+// Render will set the port, so we use process.env.PORT
+const port = process.env.PORT || 3000;
 
-// === Enable CORS ===
-app.use(cors()); // <-- ADD THIS LINE
+// Use CORS (good practice)
+app.use(cors());
 
-// === Serve Static Files ===
-// We can remove this now, since Netlify will handle our frontend
-// app.use(express.static('public')); 
-
-// === API Route for Practice ===
+// === 1. Serve API Routes ===
+// Your API routes should come *first*
 app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello from the RENDER server! 👋' });
+  res.json({ message: 'Hello from the COMBINED server! 👋' });
+});
+
+// === 2. Serve Static Frontend ===
+// This line tells Express to serve all files from the 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
+
+// === 3. Fallback Route ===
+// This sends any request that doesn't match the API or a static file
+// back to your index.html. This is key for single-page apps.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // === Start the Server ===
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server is running on port ${port}`);
 });
