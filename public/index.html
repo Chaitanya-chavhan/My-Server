@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-R">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Netlify Frontend</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Hello from your Netlify Frontend! 🚀</h1>
+    <p>This HTML file is being served by Netlify.</p>
+    
+    <button id="api-button">Test Backend API</button>
+    <pre id="api-response"></pre>
+
+    <script>
+        // --- THIS IS THE CRITICAL PART ---
+        // We will get this URL from Render in Step 2
+        const API_URL = 'YOUR_RENDER_SERVER_URL_GOES_HERE'; 
+        // ---------------------------------
+
+        const apiButton = document.getElementById('api-button');
+        const apiResponse = document.getElementById('api-response');
+
+        apiButton.addEventListener('click', async () => {
+            try {
+                apiResponse.textContent = 'Loading...';
+                // Fetch data from our /api/hello endpoint on the backend
+                const response = await fetch(API_URL + '/api/hello');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // Display the JSON response
+                apiResponse.textContent = JSON.stringify(data, null, 2);
+
+            } catch (error) {
+                apiResponse.textContent = `Error: ${error.message}`;
+                console.error('Failed to fetch from API:', error);
+            }
+        });
+    </script>
+</body>
+</html>
