@@ -22,7 +22,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // === 3. Fallback Route ===
 // This sends any request that doesn't match the API or a static file
 // back to your index.html. This is key for single-page apps.
-app.get('*', (req, res) => {
+// After:
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
